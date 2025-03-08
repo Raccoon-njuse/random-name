@@ -1,0 +1,23 @@
+{
+  "name": "random-roll-call",
+  "version": "1.0.0",
+  "description": "随机点名系统",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.random.rollcall",
+    "mac": {
+      "category": "public.app-category.education",
+      "icon": "build/icon.icns"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  }
+} 

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点名系统</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="点名">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            min-height: 100px;
+            font-size: 32px;
+            /* font-weight: bold; */
+        }
+        select, input, button {
+            padding: 8px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>点名</h1>
+    <div class="controls">
+        <select id="classSelect">
+            <option value="802">802班</option>
+            <option value="804">804班</option>
+        </select>
+        <input type="number" id="count" min="1" value="1" placeholder="抽取人数">
+        <button onclick="drawNames()">抽取</button>
+    </div>
+    <div class="result" id="result">
+        <!-- 结果将在这里显示 -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
