@@ -8,57 +8,394 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="点名">
-    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
+        :root {
+            --primary-color: #2196F3;
+            --primary-dark: #1976D2;
+            --secondary-color: #FFC107;
+            --background-color: #F5F5F5;
+            --surface-color: #FFFFFF;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --gradient-1: linear-gradient(45deg, #edd746, #bf523f);
+            --gradient-2: linear-gradient(45deg, #7F00FF, #E100FF);
+            --gradient-3: linear-gradient(45deg, #3F2B96, #A8C0FF);
+            --gradient-4: linear-gradient(45deg, #11998e, #38ef7d);
+            --gradient-5: linear-gradient(45deg, #1CB5E0, #000851);
+            --gradient-6: linear-gradient(45deg, #8E2DE2, #867ed3);
+            --gradient-7: linear-gradient(45deg, #F53844, #42378F);
+            --gradient-8: linear-gradient(45deg, #2193b0, #183a42);
+            --gradient-toggle: #FFFFFF;
+            --gradient-toggle-1: linear-gradient(45deg, #db2727, #182848);
+            --gradient-toggle-2: linear-gradient(45deg, #15e3b6, #193367);
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Noto Sans SC', sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             text-align: center;
+            background-color: var(--background-color);
+            color: var(--text-primary);
         }
+
+        .app-container {
+            background-color: var(--surface-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            color: var(--primary-color);
+        }
+
+        .title .material-icons {
+            font-size: 36px;
+            margin-right: 12px;
+        }
+
+        .title h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 500;
+        }
+
         .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
             margin: 20px 0;
+            position: relative;
+            z-index: 1;
         }
-        .result {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            min-height: 100px;
-            font-size: 32px;
-            /* font-weight: bold; */
+
+        .class-toggle {
+            display: flex;
+            position: relative;
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 0;
+            width: 100px;
+            height: 48px;
+            overflow: hidden;
         }
-        select, input, button {
-            padding: 8px;
-            margin: 5px;
+
+        .class-btn {
+            flex: 1;
+            padding: 12px 0;
             font-size: 16px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans SC', sans-serif;
+            color: #666;
+            background: transparent;
+            position: relative;
+            z-index: 2;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .class-toggle::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #ddd;
+        }
+
+        .class-btn.active {
+            background: #2196F3;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .class-btn:not(.active) {
+            background: transparent;
+            color: #666;
+        }
+
+        .class-btn:not(.active):hover {
+            background: #e5e5e5;
+            color: #333;
+        }
+
+        .number-input {
+            position: relative;
+            width: 100px;
+            z-index: 2;
+        }
+
+        .number-display {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #4a4a4a;
+            color: white;
+            text-align: center;
             cursor: pointer;
         }
+
+        .number-keyboard {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 12px;
+            z-index: 9999;
+            margin-top: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 200px;
+            background: #2c2c2c;
+        }
+
+        .number-keyboard.active {
+            display: grid;
+        }
+
+        .key {
+            padding: 12px;
+            font-size: 18px;
+            border: none;
+            border-radius: 6px;
+            background: #3a3a3a;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .key:hover {
+            background: #4a4a4a;
+        }
+
+        .key.delete {
+            background: #ff4444;
+            color: white;
+        }
+
+        .key.confirm {
+            background: #4CAF50;
+            color: white;
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-image: linear-gradient(45deg,red,orange,yellow,green,blue,indigo,violet);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans SC', sans-serif;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+        }
+
         button:hover {
-            background-color: #45a049;
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin: 32px 0;
+            padding: 32px;
+            border-radius: 12px;
+            background-color: var(--surface-color);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            min-height: 120px;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            flex-wrap: wrap;
+            gap: 12px;
+            max-width: 100%;
+        }
+
+        .name-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+            padding: 6px 12px;
+            color: white;
+            border-radius: 8px;
+            margin: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            word-break: break-all;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .name-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .name-item[data-color="1"] {
+            background-image: var(--gradient-1);
+        }
+        
+        .name-item[data-color="2"] {
+            background-image: var(--gradient-2);
+        }
+        
+        .name-item[data-color="3"] {
+            background-image: var(--gradient-3);
+        }
+        
+        .name-item[data-color="4"] {
+            background-image: var(--gradient-4);
+        }
+        
+        .name-item[data-color="5"] {
+            background-image: var(--gradient-5);
+        }
+
+        .name-item[data-color="6"] {
+            background-image: var(--gradient-6);
+        }
+        
+        .name-item[data-color="7"] {
+            background-image: var(--gradient-7);
+        }
+        
+        .name-item[data-color="8"] {
+            background-image: var(--gradient-8);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .class-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .result {
+                font-size: 20px;
+                padding: 24px;
+                gap: 8px;
+            }
+
+            .name-item {
+                padding: 4px 8px;
+                margin: 1px;
+                width: 80px;
+                height: 36px;
+            }
+
+            .number-keyboard {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                transform: none;
+                width: 100%;
+                border-radius: 12px 12px 0 0;
+                margin-top: 0;
+            }
+
+            .key {
+                padding: 16px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>点名</h1>
-    <div class="controls">
-        <select id="classSelect">
-            <option value="802">802班</option>
-            <option value="804">804班</option>
-        </select>
-        <input type="number" id="count" min="1" value="1" placeholder="抽取人数">
-        <button onclick="drawNames()">抽取</button>
-    </div>
-    <div class="result" id="result">
-        <!-- 结果将在这里显示 -->
+    <div class="app-container">
+        <div class="controls">
+            <div class="class-toggle">
+                <button class="class-btn active" data-class="802">802</button>
+                <button class="class-btn" data-class="804">804</button>
+            </div>
+            <div class="number-input">
+                <div class="number-display" id="numberDisplay">1</div>
+                <div class="number-keyboard" id="numberKeyboard">
+                    <button class="key">1</button>
+                    <button class="key">2</button>
+                    <button class="key">3</button>
+                    <button class="key">4</button>
+                    <button class="key">5</button>
+                    <button class="key">6</button>
+                    <button class="key">7</button>
+                    <button class="key">8</button>
+                    <button class="key">9</button>
+                    <button class="key delete">←</button>
+                    <button class="key">0</button>
+                    <button class="key confirm">确定</button>
+                </div>
+            </div>
+            <button onclick="drawNames()">
+                <span class="material-icons">casino</span>
+                开始抽取
+            </button>
+        </div>
+
+        <div class="result" id="result">
+            <!-- 结果将在这里显示 -->
+        </div>
+
     </div>
 
     <script src="script.js"></script>
