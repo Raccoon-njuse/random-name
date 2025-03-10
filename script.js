@@ -5,7 +5,7 @@ let studentsData = {
 
 // 加载CSV文件
 async function loadCSV(className) {
-    const response = await fetch(`./${className}.csv`);
+    const response = await fetch(`${className}.csv`);
     const csvText = await response.text();
     return new Promise(resolve => {
         Papa.parse(csvText, {

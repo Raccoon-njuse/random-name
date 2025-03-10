@@ -5,8 +5,8 @@ const urlsToCache = [
   './script.js',
   './802.csv',
   './804.csv',
-  './icon-192.png',
-  './icon-512.png',
+  './icon.png',
+  './icon.svg',
   'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js'
 ];
 
